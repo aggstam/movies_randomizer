@@ -43,6 +43,10 @@ Execution:
 ```
 % ./movies_randomizer
 ```
+To include a genre as parameter:
+```
+% ./movies_randomizer {genre}
+```
 
 ### Shell script
 Mark as executable:
@@ -52,4 +56,8 @@ Mark as executable:
 Execution:
 ```
 % ./movies_randomizer.sh
+```
+To include a genre as parameter:
+```
+% ./movies_randomizer.sh {genre}
 ```
