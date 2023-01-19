@@ -1,7 +1,7 @@
 #!/bin/bash
 # --------------------------------------------------------------------------
 #
-# This script suggest a random movie from the dataset.
+# This script suggest a random movie from the dataset of tsv files.
 #
 # Author: Aggelos Stamatiou, January 2023
 #
@@ -19,4 +19,36 @@
 # along with this source code. If not, see <http://www.gnu.org/licenses/>.
 # --------------------------------------------------------------------------
 
-echo "This is going to be fun!"
+DATASET_DIR="dataset"
+
+# Parse genre argument
+genre=$1
+if [ -z "$1" ]; then
+    genre="all"
+fi
+
+# Retrieve available genres
+genres=$(ls $DATASET_DIR -1 | sed -e 's/\.tsv$//')
+
+# If requested genre is all we search for suggestion
+if [ "$genre" = "all" ]; then
+    echo "Suggesting a movie from genre: $genre"
+    # TODO: add sugestion call here
+    exit
+fi
+
+# Otherwise check if we have requested gender
+for g in $genres; do
+    if [ "$genre" = "$g" ]; then
+        echo "Suggesting a movie from genre: $genre"
+        # TODO: add sugestion call here
+        exit
+    fi
+done
+
+# Genre not found
+echo "Requested genre $genre not found."
+echo "Available genres:"
+for g in $genres; do
+    echo "    $g"
+done
