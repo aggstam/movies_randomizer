@@ -65,6 +65,58 @@ char** available_genres(size_t* elements) {
     return genres;
 }
 
+// Auxillary function to randomly select a record from
+// provided .tsv file
+void suggest(char* genre) {
+    // Generating file path
+    char path[1024];
+    strcat(path, DATASET_DIR);
+    strcat(path, "/");
+    strcat(path, genre);
+    strcat(path, ".tsv");
+    printf("Openning file: %s\n", path);
+
+    // Open file
+    FILE* file = fopen(path, "r");
+    if (file == NULL) {
+        printf("Error: Failed to open file: %s\n", strerror(errno));
+        fclose(file);
+    }
+
+    // Retrieve records
+    char** records = (char**)malloc(sizeof(char*));
+    int elements = 0;
+    size_t buff_size = 1024;
+    char buffer[buff_size];
+    while (fgets(buffer, buff_size, file) != NULL) {
+        records[elements] = malloc(buff_size);
+        strcpy(records[elements], buffer);
+        elements++;
+    }
+
+    // Generate suggestion
+    char* suggestion = records[rand() % elements];
+
+    // Parse suggestion
+    char** parsed = (char**)malloc(sizeof(char*));
+    char* part = strtok(suggestion, "|");
+    int index = 0;
+    while (part != NULL) {
+        parsed[index] = malloc(buff_size);
+        strcpy(parsed[index], part);
+        part = strtok(NULL, "|");
+        index++;
+    }
+
+    // Print information
+    printf("Name: %s\n", parsed[0]);
+    printf("Year: %s\n", parsed[1]);
+    printf("Duration: %s", parsed[2]);
+
+    // Free memory
+    free(records);
+}
+
 int main(int argc, char** argv) {
     // Parse genre argument
     char* genre = argv[1];
@@ -80,14 +132,16 @@ int main(int argc, char** argv) {
         free(genres);
         return 0;
     }
+    
+    // Seed random
+    srand(time(NULL));
 
     // If requested genre is all we search for suggestion
     // from a randomly selected genre
     if (strcmp("all", genre) == 0) {
-        srand(time(NULL));
         genre = genres[rand() % elements];
         printf("Suggesting a movie from randomly selected genre: %s\n", genre);
-        // TODO: add sugestion call here
+        suggest(genre);
         free(genres);
         return 0;
     }
@@ -97,7 +151,7 @@ int main(int argc, char** argv) {
     for (i; i < elements; i++) {
 	    if (strcmp(genres[i], genre) == 0) {
 	        printf("Suggesting a movie from genre: %s\n", genre);
-	        // TODO: add sugestion call here
+	        suggest(genre);
 	        free(genres);
             return 0;
 	    }

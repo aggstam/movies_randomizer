@@ -29,6 +29,7 @@ suggest() {
 
     # Parse suggestion
     IFS=$'|' read -r -a movie <<< $suggestion
+    
     # Print information
     echo "Name: ${movie[0]}"
     echo "Year: ${movie[1]}"
