@@ -120,7 +120,7 @@ void suggest(char* genre) {
 int main(int argc, char** argv) {
     // Parse genre argument
     char* genre = argv[1];
-    if ((genre != NULL) && (genre[0] == '\0')) {
+    if ((genre == NULL) || (genre[0] == '\0')) {
         genre = "all";
     }
 
