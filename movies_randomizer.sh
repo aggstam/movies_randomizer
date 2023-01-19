@@ -1,7 +1,7 @@
 #!/bin/bash
 # --------------------------------------------------------------------------
 #
-# This script suggest a random movie from the dataset of tsv files.
+# This script suggest a random movie from the dataset of .tsv files.
 #
 # Author: Aggelos Stamatiou, January 2023
 #
@@ -21,6 +21,20 @@
 
 DATASET_DIR="dataset"
 
+# Auxillary function to randomly select a record from
+# provided .tsv file
+suggest() {
+    # Generate suggestion
+    suggestion=$(shuf -n 1 $DATASET_DIR/$1.tsv)
+
+    # Parse suggestion
+    IFS=$'|' read -r -a movie <<< $suggestion
+    # Print information
+    echo "Name: ${movie[0]}"
+    echo "Year: ${movie[1]}"
+    echo "Duration: ${movie[2]}"
+}
+
 # Parse genre argument
 genre=$1
 if [ -z "$1" ]; then
@@ -35,7 +49,7 @@ genres=($(ls $DATASET_DIR -1 | sed -e 's/\.tsv$//'))
 if [ "$genre" = "all" ]; then
     genre=${genres[$RANDOM % ${#genres[@]}]}
     echo "Suggesting a movie from randomly selected genre: $genre"
-    # TODO: add sugestion call here
+    suggest $genre
     exit
 fi
 
@@ -43,7 +57,7 @@ fi
 for g in ${genres[@]}; do
     if [ "$genre" = "$g" ]; then
         echo "Suggesting a movie from genre: $genre"
-        # TODO: add sugestion call here
+        suggest $genre
         exit
     fi
 done
@@ -52,5 +66,5 @@ done
 echo "Requested genre $genre not found."
 echo "Available genres:"
 for g in ${genres[@]}; do
-    echo "    $g"
+    echo -e "\t$g"
 done

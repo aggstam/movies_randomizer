@@ -1,6 +1,6 @@
 // -------------------------------------------------------------
 //
-// This program suggest a random movie from the dataset of tsv files.
+// This program suggest a random movie from the dataset of .tsv files.
 //
 // Author: Aggelos Stamatiou, January 2023
 //
