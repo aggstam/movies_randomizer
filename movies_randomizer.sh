@@ -1,7 +1,7 @@
 #!/bin/bash
 # --------------------------------------------------------------------------
 #
-# This script suggest a random movie from the dataset of .tsv files.
+# This script suggest a random movie from the dataset of PSV(Pipe-Separated Values) files.
 #
 # Author: Aggelos Stamatiou, January 2023
 #
@@ -22,10 +22,10 @@
 DATASET_DIR="dataset"
 
 # Auxillary function to randomly select a record from
-# provided .tsv file
+# provided .psv file
 suggest() {
     # Generate suggestion
-    suggestion=$(shuf -n 1 $DATASET_DIR/$1.tsv)
+    suggestion=$(shuf -n 1 $DATASET_DIR/$1.psv)
 
     # Parse suggestion
     IFS=$'|' read -r -a movie <<< $suggestion
@@ -43,7 +43,7 @@ if [ -z "$1" ]; then
 fi
 
 # Retrieve available genres
-genres=($(ls $DATASET_DIR -1 | sed -e 's/\.tsv$//'))
+genres=($(ls $DATASET_DIR -1 | sed -e 's/\.psv$//'))
 
 # If requested genre is all we search for suggestion
 # from a randomly selected genre

@@ -1,6 +1,6 @@
 // -------------------------------------------------------------
 //
-// This program suggest a random movie from the dataset of .tsv files.
+// This program suggest a random movie from the dataset of PSV(Pipe-Separated Values) files.
 //
 // Author: Aggelos Stamatiou, January 2023
 //
@@ -42,7 +42,7 @@ char** available_genres(size_t* elements) {
 
     // Iterate through files
     while (entry = readdir(dataset_dir)){
-        // Ignore ., .. and non .tsv files
+        // Ignore ., .. and non .psv files
         if (!strcmp(entry->d_name, ".")) {
             continue;
         }
@@ -50,7 +50,7 @@ char** available_genres(size_t* elements) {
             continue;
         }
         int len = strlen(entry->d_name);
-        if ((len < 4) || (strcmp(&(entry->d_name[len - 4]), ".tsv") != 0)) {
+        if ((len < 4) || (strcmp(&(entry->d_name[len - 4]), ".psv") != 0)) {
             continue;
         }
 
@@ -66,14 +66,14 @@ char** available_genres(size_t* elements) {
 }
 
 // Auxillary function to randomly select a record from
-// provided .tsv file
+// provided .psv file
 void suggest(char* genre) {
     // Generating file path
     char path[1024];
     strcat(path, DATASET_DIR);
     strcat(path, "/");
     strcat(path, genre);
-    strcat(path, ".tsv");
+    strcat(path, ".psv");
     printf("Openning file: %s\n", path);
 
     // Open file
