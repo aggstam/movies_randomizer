@@ -149,20 +149,20 @@ int main(int argc, char** argv) {
     // Otherwise check if we have requested gender
     int i = 0;
     for (i; i < elements; i++) {
-	    if (strcmp(genres[i], genre) == 0) {
-	        printf("Suggesting a movie from genre: %s\n", genre);
-	        suggest(genre);
-	        free(genres);
+        if (strcmp(genres[i], genre) == 0) {
+            printf("Suggesting a movie from genre: %s\n", genre);
+            suggest(genre);
+            free(genres);
             return 0;
-	    }
-	}
+        }
+    }
 
-	// Genre not found
-	printf("Requested genre %s not found.\n", genre);
-	printf("Available genres:\n");
-	for (i = 0; i < elements; i++) {
-	    printf("\t%s\n", genres[i]);
-	}
+    // Genre not found
+    printf("Requested genre %s not found.\n", genre);
+    printf("Available genres:\n");
+    for (i = 0; i < elements; i++) {
+        printf("\t%s\n", genres[i]);
+    }
     
     free(genres);
     return 0;
