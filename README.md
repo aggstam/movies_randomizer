@@ -10,7 +10,7 @@ Records format is the following:
 ```
 
 # Usage
-Two version have been implemented, one with pure C, and a bash script.
+Two version have been implemented, one with pure C, and a shell script.
 <br>
 Both can be invocted via the Makefile, or by directly compiling and executing.
 
@@ -24,7 +24,7 @@ To include a genre as parameter:
 % make GENRE={genre}
 ```
 
-### Bash script
+### Shell script
 ```
 % make script
 ```
@@ -44,7 +44,7 @@ Execution:
 % ./movies_randomizer
 ```
 
-### Bash script
+### Shell script
 Mark as executable:
 ```
 % chmod a+x movies_randomizer.sh
