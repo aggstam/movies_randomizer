@@ -24,11 +24,12 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <string.h>
+#include <time.h>
 
 #define DATASET_DIR "dataset"
 
 // Read dataset folder to retrieve available genres
-char** available_genres() {
+char** available_genres(size_t* elements) {
     char** genres = (char**)malloc(sizeof(char*));
     DIR* dataset_dir = opendir(DATASET_DIR);
     struct dirent *entry;
@@ -36,12 +37,10 @@ char** available_genres() {
     // Check if we could open the directory
     if (dataset_dir == NULL) {
         printf("Error: Failed to open dataset directory: %s\n", strerror(errno));
-        genres[0] = NULL;
         return genres;
     }
 
     // Iterate through files
-    int i = 0;
     while (entry = readdir(dataset_dir)){
         // Ignore ., .. and non .tsv files
         if (!strcmp(entry->d_name, ".")) {
@@ -56,13 +55,12 @@ char** available_genres() {
         }
 
         // Copy file name
-        genres[i] = malloc(strlen(entry->d_name) - 4);
-        strcpy(genres[i], entry->d_name);
+        genres[*elements] = malloc(strlen(entry->d_name) - 4);
+        strcpy(genres[*elements], entry->d_name);
         // Remove extension
-        genres[i][len - 4] = '\0';
-        i++;
+        genres[*elements][len - 4] = '\0';
+        *elements += 1;
     }
-    genres[i] = NULL;
 
     return genres;
 }
@@ -75,16 +73,20 @@ int main(int argc, char** argv) {
     }
 
     // Retrieve available genres
-    char** genres = available_genres();
-    if (genres[0] == NULL) {
+    size_t elements = 0;
+    char** genres = available_genres(&elements);
+    if (elements == 0) {
         printf("No genres were found, terminating.");
         free(genres);
         return 0;
     }
 
     // If requested genre is all we search for suggestion
+    // from a randomly selected genre
     if (strcmp("all", genre) == 0) {
-        printf("Suggesting a movie from genre: %s\n", genre);
+        srand(time(NULL));
+        genre = genres[rand() % elements];
+        printf("Suggesting a movie from randomly selected genre: %s\n", genre);
         // TODO: add sugestion call here
         free(genres);
         return 0;
@@ -92,29 +94,20 @@ int main(int argc, char** argv) {
 
     // Otherwise check if we have requested gender
     int i = 0;
-    while (1) {
-	    if (genres[i] == NULL) {
-	        break;
-	    }
+    for (i; i < elements; i++) {
 	    if (strcmp(genres[i], genre) == 0) {
 	        printf("Suggesting a movie from genre: %s\n", genre);
 	        // TODO: add sugestion call here
 	        free(genres);
             return 0;
 	    }
-	    i++;
 	}
 
 	// Genre not found
 	printf("Requested genre %s not found.\n", genre);
 	printf("Available genres:\n");
-	i = 0;
-	while (1) {
-	    if (genres[i] == NULL) {
-	        break;
-	    }
+	for (i = 0; i < elements; i++) {
 	    printf("\t%s\n", genres[i]);
-	    i++;
 	}
     
     free(genres);

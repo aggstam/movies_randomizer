@@ -28,17 +28,19 @@ if [ -z "$1" ]; then
 fi
 
 # Retrieve available genres
-genres=$(ls $DATASET_DIR -1 | sed -e 's/\.tsv$//')
+genres=($(ls $DATASET_DIR -1 | sed -e 's/\.tsv$//'))
 
 # If requested genre is all we search for suggestion
+# from a randomly selected genre
 if [ "$genre" = "all" ]; then
-    echo "Suggesting a movie from genre: $genre"
+    genre=${genres[$RANDOM % ${#genres[@]}]}
+    echo "Suggesting a movie from randomly selected genre: $genre"
     # TODO: add sugestion call here
     exit
 fi
 
 # Otherwise check if we have requested gender
-for g in $genres; do
+for g in ${genres[@]}; do
     if [ "$genre" = "$g" ]; then
         echo "Suggesting a movie from genre: $genre"
         # TODO: add sugestion call here
@@ -49,6 +51,6 @@ done
 # Genre not found
 echo "Requested genre $genre not found."
 echo "Available genres:"
-for g in $genres; do
+for g in ${genres[@]}; do
     echo "    $g"
 done
