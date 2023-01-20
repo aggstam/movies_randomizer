@@ -32,6 +32,10 @@
 // Read dataset folder to retrieve available genres
 char** available_genres(size_t* elements) {
     char** genres = (char**)malloc(sizeof(char*));
+    if (genres == NULL) {
+      printf("Error: malloc for genres failed.\n");
+      return genres;
+    }
     DIR* dataset_dir = opendir(DATASET_DIR);
     struct dirent *entry;
 
@@ -58,6 +62,10 @@ char** available_genres(size_t* elements) {
 
         // Copy file name
         genres[*elements] = malloc(strlen(entry->d_name) - 4);
+        if (genres[*elements] == NULL) {
+          printf("Error: malloc for file name failed.\n");
+          continue;
+        }
         strcpy(genres[*elements], entry->d_name);
         // Remove extension
         genres[*elements][len - 4] = '\0';
@@ -91,9 +99,17 @@ void suggest(char* genre) {
     // Retrieve records
     char buffer[STR_SIZE];
     char** records = (char**)malloc(STR_SIZE);
+    if (records == NULL) {
+      printf("Error: malloc for records failed.\n");
+      return;
+    }
     size_t elements = 0;
     while (fgets(buffer, STR_SIZE, file) != NULL) {
         records[elements] = malloc(STR_SIZE);
+        if (records == NULL) {
+          printf("Error: malloc for records element failed.\n");
+          continue;
+        }
         strcpy(records[elements], buffer);
         elements++;
     }
@@ -106,10 +122,18 @@ void suggest(char* genre) {
 
     // Parse suggestion
     char** parsed = (char**)malloc(sizeof(char*));
+    if (records == NULL) {
+      printf("Error: malloc for parsed failed.\n");
+      return;
+    }
     char* part = strtok(suggestion, "|");
     int index = 0;
     while (part != NULL) {
         parsed[index] = malloc(STR_SIZE);
+        if (records == NULL) {
+          printf("Error: malloc for parsed element failed.\n");
+          continue;
+        }
         strcpy(parsed[index], part);
         part = strtok(NULL, "|");
         index++;
