@@ -27,6 +27,7 @@
 #include <time.h>
 
 #define DATASET_DIR "dataset"
+#define STR_SIZE 1024
 
 // Read dataset folder to retrieve available genres
 char** available_genres(size_t* elements) {
@@ -37,6 +38,7 @@ char** available_genres(size_t* elements) {
     // Check if we could open the directory
     if (dataset_dir == NULL) {
         printf("Error: Failed to open dataset directory: %s\n", strerror(errno));
+        closedir(dataset_dir);
         return genres;
     }
 
@@ -62,6 +64,9 @@ char** available_genres(size_t* elements) {
         *elements += 1;
     }
 
+    // Close directory
+    closedir(dataset_dir);
+
     return genres;
 }
 
@@ -69,7 +74,7 @@ char** available_genres(size_t* elements) {
 // provided .psv file
 void suggest(char* genre) {
     // Generating file path
-    char path[1024];
+    char path[STR_SIZE] = {'\0'};
     strcat(path, DATASET_DIR);
     strcat(path, "/");
     strcat(path, genre);
@@ -80,19 +85,21 @@ void suggest(char* genre) {
     FILE* file = fopen(path, "r");
     if (file == NULL) {
         printf("Error: Failed to open file: %s\n", strerror(errno));
-        fclose(file);
+        return;
     }
 
     // Retrieve records
-    char** records = (char**)malloc(sizeof(char*));
-    int elements = 0;
-    size_t buff_size = 1024;
-    char buffer[buff_size];
-    while (fgets(buffer, buff_size, file) != NULL) {
-        records[elements] = malloc(buff_size);
+    char buffer[STR_SIZE];
+    char** records = (char**)malloc(STR_SIZE);
+    size_t elements = 0;
+    while (fgets(buffer, STR_SIZE, file) != NULL) {
+        records[elements] = malloc(STR_SIZE);
         strcpy(records[elements], buffer);
         elements++;
     }
+
+    // Close file
+    fclose(file);
 
     // Generate suggestion
     char* suggestion = records[rand() % elements];
@@ -102,7 +109,7 @@ void suggest(char* genre) {
     char* part = strtok(suggestion, "|");
     int index = 0;
     while (part != NULL) {
-        parsed[index] = malloc(buff_size);
+        parsed[index] = malloc(STR_SIZE);
         strcpy(parsed[index], part);
         part = strtok(NULL, "|");
         index++;
@@ -128,7 +135,7 @@ int main(int argc, char** argv) {
     size_t elements = 0;
     char** genres = available_genres(&elements);
     if (elements == 0) {
-        printf("No genres were found, terminating.");
+        printf("No genres were found, terminating.\n");
         free(genres);
         return 0;
     }
