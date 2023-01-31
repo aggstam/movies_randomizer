@@ -9,13 +9,13 @@ Records format is the following:
 {Name}|{Year}|{Duration}
 ```
 
-# Usage
+## Usage
 Two version have been implemented, one with pure C, and a shell script.
 <br>
 Both can be invocted via the Makefile, or by directly compiling and executing.
 
-## Make usage
-### C code
+### Make usage
+#### C code
 ```
 % make
 ```
@@ -24,7 +24,7 @@ To include a genre as parameter:
 % make GENRE={genre}
 ```
 
-### Shell script
+#### Shell script
 ```
 % make script
 ```
@@ -33,8 +33,8 @@ To include a genre as parameter:
 % make script GENRE={genre}
 ```
 
-## Direct usage
-### C code
+### Direct usage
+#### C code
 Compilation:
 ```
 % gcc -o movies_randomizer movies_randomizer.c
@@ -48,7 +48,7 @@ To include a genre as parameter:
 % ./movies_randomizer {genre}
 ```
 
-### Shell script
+#### Shell script
 Mark as executable:
 ```
 % chmod a+x movies_randomizer.sh
