@@ -30,8 +30,9 @@
 #define STR_SIZE 1024
 
 // Read dataset folder to retrieve available genres
-char** available_genres(size_t* elements) {
-    char** genres = (char**)malloc(sizeof(char*));
+char **available_genres(size_t *elements)
+{
+    char **genres = (char**)malloc(sizeof(char*));
     if (genres == NULL) {
       printf("Error: malloc for genres failed.\n");
       return genres;
@@ -80,7 +81,8 @@ char** available_genres(size_t* elements) {
 
 // Auxillary function to randomly select a record from
 // provided .psv file
-void suggest(char* genre) {
+void suggest(char *genre)
+{
     // Generating file path
     char path[STR_SIZE] = {'\0'};
     strcat(path, DATASET_DIR);
@@ -90,7 +92,7 @@ void suggest(char* genre) {
     printf("Openning file: %s\n", path);
 
     // Open file
-    FILE* file = fopen(path, "r");
+    FILE *file = fopen(path, "r");
     if (file == NULL) {
         printf("Error: Failed to open file: %s\n", strerror(errno));
         return;
@@ -98,7 +100,7 @@ void suggest(char* genre) {
 
     // Retrieve records
     char buffer[STR_SIZE];
-    char** records = (char**)malloc(STR_SIZE);
+    char **records = (char**)malloc(STR_SIZE);
     if (records == NULL) {
       printf("Error: malloc for records failed.\n");
       return;
@@ -118,15 +120,15 @@ void suggest(char* genre) {
     fclose(file);
 
     // Generate suggestion
-    char* suggestion = records[rand() % elements];
+    char *suggestion = records[rand() % elements];
 
     // Parse suggestion
-    char** parsed = (char**)malloc(sizeof(char*));
+    char **parsed = (char**)malloc(sizeof(char*));
     if (records == NULL) {
       printf("Error: malloc for parsed failed.\n");
       return;
     }
-    char* part = strtok(suggestion, "|");
+    char *part = strtok(suggestion, "|");
     int index = 0;
     while (part != NULL) {
         parsed[index] = malloc(STR_SIZE);
@@ -148,16 +150,17 @@ void suggest(char* genre) {
     free(records);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     // Parse genre argument
-    char* genre = argv[1];
+    char *genre = argv[1];
     if ((genre == NULL) || (genre[0] == '\0')) {
         genre = "all";
     }
 
     // Retrieve available genres
     size_t elements = 0;
-    char** genres = available_genres(&elements);
+    char **genres = available_genres(&elements);
     if (elements == 0) {
         printf("No genres were found, terminating.\n");
         free(genres);
