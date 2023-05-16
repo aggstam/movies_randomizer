@@ -12,3 +12,5 @@ script:
 
 clean:
 	rm -f movies_randomizer
+
+.PHONY: all script clean
